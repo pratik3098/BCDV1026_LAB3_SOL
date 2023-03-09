@@ -1,0 +1,14 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    container: ghcr.io/cosmos/cosmos-db/build-test:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: run tests
+        run: go test ./... -mod=readonly -timeout 8m -race -coverprofile=coverage.txt -covermode=atomic -tags=memdb,goleveldb,rocksdb -v
