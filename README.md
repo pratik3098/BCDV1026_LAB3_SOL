@@ -4,7 +4,6 @@
 git clone https://github.com/CosmWasm/wasmd
 
 
-
 ## clone the cosmwasm contract templates repo
 git clone https://github.com/cosmwasm/cw-examples
 
@@ -52,33 +51,19 @@ vim /root/.wasmd/config/app.toml
 wasmd start
 
 
-wasmd tx wasm store target/wasm32-unknown-unknown/release/cw_nameservice.wasm --from main  $TXFLAG -y -b block
+
+## Deploy the smart contract 
+## Note: cw_nameservice.wasm is the rust binary built for the  wasm chain 
+wasmd tx wasm store /home/cw/contracts/nameservice/target/wasm32-unknown-unknown/release/cw_nameservice.wasm --from main  $TXFLAG -y -b block
 
 
-
+### Intitialize the smart contract with some params 
 INIT='{"purchase_price":{"amount":"100","denom":"stake"},"transfer_price":{"amount":"999","denom":"stake"}}'
-
 wasmd tx wasm instantiate 1 "$INIT" --from main - --label "awesome name service" --no-admin $TXFLAG
 
+
+
+### Sample query to the smart contract
+### Note: The query over here is just querying the contract version
 CONTRACT=$(wasmd query wasm list-contract-by-code $CODE_ID --output json | jq -r '.contracts[-1]')
 wasmd query wasm contract $CONTRACT
-
-# check contract state
-
-### Step2: Build the wasm binary using the Docker env 
-
-
-### Step3: Clone the Cosmwasm conttract examples
-
-
-### Step4: Build the smart contract 
-
-
-### Step5: Deploy the smart contract to the wasm chain 
-
-
-
-
-
-
-
